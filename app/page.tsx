@@ -1,8 +1,12 @@
 import Image from 'next/image'
-import AddTaskBtn from './components/bases/AddTaskBtn'
-import TodoListTable from './components/TodoListTable'
+import { getAllTodos } from '@/utils/api'
 
-export default function Home() {
+import AddTaskBtn from '@/app/components/bases/AddTaskBtn'
+import TodoList from '@/app/components/TodoList'
+
+export default async function Home() {
+  const tasks = await getAllTodos();
+
   return (
     <main className='p-5'>
       <div className='container mx-auto'>
@@ -17,7 +21,7 @@ export default function Home() {
 
         <AddTaskBtn />
 
-        <TodoListTable />
+        <TodoList tasks={tasks} />
       </div>
     </main>
   )
