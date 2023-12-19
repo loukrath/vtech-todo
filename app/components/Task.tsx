@@ -89,94 +89,102 @@ const Task: React.FC<TaskProps> = ({ task }) => {
   }
 
   return (
-    <tr key={task.id} className="border-b-gray-200 group">
-      <td>{task.title}</td>
-      <td className="text-center">
-        {
-          task.isCompleted &&
-          <button
-            onClick={handleUpdateTaskStatus}
-            className="btn btn-sm btn-outline btn-success btn-wide text-xs"
-          >
-            { isLoadingUpdate && <span className="loading loading-sm"></span> }
-            Mark as Incomplete
-          </button>
-        }
+    <>
+      <tr key={task.id} className="border-b-gray-200 group">
+        <td>{task.title}</td>
+        <td className="text-center">
+          {
+            task.isCompleted &&
+            <button
+              onClick={handleUpdateTaskStatus}
+              className="btn btn-sm btn-outline btn-success btn-wide text-xs"
+            >
+              { isLoadingUpdate && <span className="loading loading-sm"></span> }
+              Mark as Incomplete
+            </button>
+          }
 
-        {
-          !task.isCompleted &&
-          <button
-            onClick={handleUpdateTaskStatus}
-            className="btn btn-sm btn-outline btn-wide text-xs"
-          >
-            { isLoadingUpdate && <span className="loading loading-sm"></span> }
-            Mark as complete
-          </button>
-        }
-      </td>
-      <td className="flex opacity-0 space-x-2 group-hover:opacity-100">
-        <FiEdit onClick={() => setIsShowEditModal(true)} cursor="pointer" className="text-blue-500" size={25} />
-        <Modal
-          isShowModal={isShowEditModal}
-          setModalOpen={setIsShowEditModal}
+          {
+            !task.isCompleted &&
+            <button
+              onClick={handleUpdateTaskStatus}
+              className="btn btn-sm btn-outline btn-wide text-xs"
+            >
+              { isLoadingUpdate && <span className="loading loading-sm"></span> }
+              Mark as complete
+            </button>
+          }
+        </td>
+        <td className="flex opacity-0 space-x-2 group-hover:opacity-100">
+          <FiEdit onClick={() => setIsShowEditModal(true)} cursor="pointer" className="text-blue-500" size={25} />
+
+          <FiTrash2
+            onClick={() => setIsShowDeleteModale(true)}
+            cursor="pointer"
+            className="text-red-500"
+            size={25}
+          />
+        </td>
+      </tr>
+
+      {/* Edit modal */}
+      <Modal
+        isShowModal={isShowEditModal}
+        setModalOpen={setIsShowEditModal}
         >
-          <form onSubmit={handleSubmitEditTask}>
-            <h3 className='font-bold text-lg text-center'>
-              Edit task
-            </h3>
-
-            <div className='modal-action'>
-              <input
-                value={taskToEdit}
-                onChange={(e) => setTaskToEdit(e.target.value)}
-                type="text"
-                placeholder="New task"
-                className="input input-bordered w-full max-w-full bg-white"
-              />
-
-              <button type='submit' className='btn btn-primary'>
-                { isLoadingUpdate && <span className="loading loading-sm"></span> }
-                Update
-              </button>
-            </div>
-          </form>
-        </Modal>
-
-        <FiTrash2
-          onClick={() => setIsShowDeleteModale(true)}
-          cursor="pointer"
-          className="text-red-500"
-          size={25}
-        />
-        <Modal
-          isShowModal={isShowDeleteModale}
-          setModalOpen={setIsShowDeleteModale}
-        >
-          <h3 className='font-bold text-lg text-center'>
-            Are you sure you want to delete this task?
+        <form onSubmit={handleSubmitEditTask}>
+          <h3 className='font-bold text-lg text-center text-primary'>
+            Edit task
           </h3>
 
-          <div className="modal-action">
-            <div className="space-x-2 w-full flex">
-              <button
-                onClick={() => setIsShowDeleteModale(false)}
-                className="btn btn-ghost flex-1"
-              >
-                Cancel
-              </button>
+          <div className='modal-action'>
+            <input
+              value={taskToEdit}
+              onChange={(e) => setTaskToEdit(e.target.value)}
+              type="text"
+              placeholder="New task"
+              className="input input-bordered w-full max-w-full bg-white"
+            />
 
-              <button
-                onClick={handleDeleteTask}
-                className="btn btn-error flex-1"
-              >
-                { isLoadingDelete && <span className="loading loading-sm"></span> }
-                Confirm
-              </button>
-            </div>
+            <button type='submit' className='btn btn-primary text-white'>
+              { isLoadingUpdate && <span className="loading loading-sm"></span> }
+              Update
+            </button>
           </div>
-        </Modal>
-      </td>
-    </tr>
+        </form>
+      </Modal>
+      {/* !! Edit modal */}
+
+      {/* Delete modal */}
+      <Modal
+        isShowModal={isShowDeleteModale}
+        setModalOpen={setIsShowDeleteModale}
+      >
+        <h3 className='font-bold text-lg text-center text-primary'>
+          Are you sure you want to delete this task?
+        </h3>
+
+        <div className="modal-action">
+          <div className="space-x-2 w-full flex">
+            <button
+              onClick={() => setIsShowDeleteModale(false)}
+              className="btn btn-ghost flex-1"
+            >
+              Cancel
+            </button>
+
+            <button
+              onClick={handleDeleteTask}
+              className="btn btn-error flex-1 text-white"
+            >
+              { isLoadingDelete && <span className="loading loading-sm"></span> }
+              Confirm
+            </button>
+          </div>
+        </div>
+      </Modal>
+      {/* !! Delete modal */}
+    </>
   )
 }
 
