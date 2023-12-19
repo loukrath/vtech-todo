@@ -3,15 +3,29 @@
 import { AiOutlinePlus } from 'react-icons/ai'
 import Modal from '@/app/components/bases/Modal'
 import { useState } from 'react'
+import { addNewTask } from '@/utils/api'
+import { useRouter } from 'next/navigation'
 
 const AddTaskBtn = () => {
+  const router = useRouter();
   const [isShowModal, setModalOpen] = useState<boolean>(false)
-  const [newTask, setNewTask] = useState<string>('')  
-  const handleSubmitNewTask = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    console.log('new task', newTask)
+  const [newTaskVal, setNewTaskVal] = useState<string>('')  
 
-    // setModalOpen(false)
+  const handleSubmitNewTask = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    console.log('new task', newTaskVal)
+
+    const newTask = {
+      id: "7",
+      title: newTaskVal,
+      isCompleted: false
+    }
+
+    await addNewTask(newTask)
+
+    setNewTaskVal('')
+    setModalOpen(false)
+    router.refresh()
   }
 
   return (
@@ -29,8 +43,8 @@ const AddTaskBtn = () => {
 
           <div className='modal-action'>
             <input
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
+              value={newTaskVal}
+              onChange={(e) => setNewTaskVal(e.target.value)}
               type="text"
               placeholder="New task"
               className="input input-bordered w-full max-w-full"
