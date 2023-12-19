@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import Image from 'next/image'
-import { getAllTodos } from '@/utils/api'
 
+import { getAllTodos } from '@/utils/api'
 import AddTaskBtn from '@/app/components/bases/AddTaskBtn'
 import TodoList from '@/app/components/TodoList'
+import SearchTask from '@/app/components/SearchTask'
 
 export default async function Home() {
   const tasks = await getAllTodos();
@@ -18,9 +20,11 @@ export default async function Home() {
           Vtech Todo List
         </h1>
 
-
-        <AddTaskBtn />
-
+        <div className='flex space-x-5'>
+          <SearchTask />
+          <AddTaskBtn />
+        </div>
+        
         <TodoList tasks={tasks} />
       </div>
     </main>
