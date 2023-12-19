@@ -1,34 +1,19 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "Learn JavaScript",
-      "isCompleted": false
-    },
-    {
       "id": "2",
-      "title": "Learn Vue",
+      "title": "Learn VueJs",
       "isCompleted": false
     },
     {
       "id": "3",
-      "title": "Build something awesome",
-      "isCompleted": false
-    },
-    {
-      "id": "4",
-      "title": "Love you",
-      "isCompleted": false
-    },
-    {
-      "id": "6",
-      "title": "Go to market",
+      "title": "Build something awesome nas",
       "isCompleted": false
     },
     {
       "id": "7",
-      "title": "Go to interview",
-      "isCompleted": false
+      "title": "Interview",
+      "isCompleted": true
     }
   ]
 }

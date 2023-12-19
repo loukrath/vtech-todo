@@ -1,10 +1,11 @@
 'use client'
 
 import { AiOutlinePlus } from 'react-icons/ai'
-import Modal from '@/app/components/bases/Modal'
 import { useState } from 'react'
-import { addNewTask } from '@/utils/api'
 import { useRouter } from 'next/navigation'
+
+import { addNewTask } from '@/utils/api'
+import Modal from '@/app/components/bases/Modal'
 
 const AddTaskBtn = () => {
   const router = useRouter();
@@ -13,7 +14,6 @@ const AddTaskBtn = () => {
 
   const handleSubmitNewTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('new task', newTaskVal)
 
     const newTask = {
       id: "7",
@@ -47,7 +47,7 @@ const AddTaskBtn = () => {
               onChange={(e) => setNewTaskVal(e.target.value)}
               type="text"
               placeholder="New task"
-              className="input input-bordered w-full max-w-full"
+              className="input input-bordered w-full max-w-full bg-white"
             />
 
             <button type='submit' className='btn btn-primary'>
