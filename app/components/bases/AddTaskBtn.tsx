@@ -16,7 +16,7 @@ const AddTaskBtn = () => {
     e.preventDefault()
 
     const newTask = {
-      id: "7",
+      id: "10",
       title: newTaskVal,
       isCompleted: false
     }
