@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import Modal from '@/app/components/bases/Modal'
 import { ITask } from "@/types/tasks";
-import { updateTask, deleteTask } from '@/utils/api'
+import { updateTask } from '@/utils/api'
 
 
 interface TaskProps {
@@ -29,7 +29,7 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
       setIsLoadingUpdate(true)
       const newTask = {
         id: task.id,
-        title: task.title,
+        todo: task.todo,
         isCompleted: !task.isCompleted
       }
   
@@ -46,7 +46,7 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
   return (
     <>
       <tr key={task.id} className="border-b-gray-200 group">
-        <td>{task.title}</td>
+        <td>{task.todo}</td>
         <td className="text-center">
           {
             task.isCompleted &&

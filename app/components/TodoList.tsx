@@ -20,7 +20,7 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
   const [isShowEditModal, setIsShowEditModal] = useState<boolean>(false)
   const [isShowDeleteModal, setIsShowDeleteModal] = useState<boolean>(false)
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
-  const [taskToEdit, setTaskToEdit] = useState<ITask>({id: '', title: '', isCompleted: false})
+  const [taskToEdit, setTaskToEdit] = useState<ITask>({id: '', todo: '', isCompleted: false})
   const [idTaskToDelete, setIdTaskToDelete] = useState<string>('')
 
   /**
@@ -106,8 +106,8 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
 
           <div className='modal-action'>
             <input
-              value={taskToEdit.title}
-              onChange={(e) => setTaskToEdit({ ...taskToEdit, title: e.target.value })}
+              value={taskToEdit.todo}
+              onChange={(e) => setTaskToEdit({ ...taskToEdit, todo: e.target.value })}
               type="text"
               placeholder="New task"
               className="input input-bordered w-full max-w-full text-black bg-white"
