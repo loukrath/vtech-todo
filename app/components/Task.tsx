@@ -10,7 +10,7 @@ import Conditional from "@/app/components/bases/Conditional";
 
 interface TaskProps {
   task: ITask,
-  setModalEditOpen: (open: boolean, task: ITask) => boolean | void,
+  setModalEditOpen: (open: boolean, id: string) => boolean | void,
   setModalDeleteOpen: (open: boolean, id: string) => boolean | void,
 }
 
@@ -69,7 +69,7 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
         </td>
         <td className="flex opacity-0 space-x-2 group-hover:opacity-100">
           <FiEdit
-            onClick={() => setModalEditOpen(true, task)}
+            onClick={() => setModalEditOpen(true, task.id)}
             cursor="pointer"
             className="text-blue-500" size={25} />
 

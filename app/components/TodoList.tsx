@@ -2,15 +2,23 @@
 
 import React, { useState } from "react"
 import { useRouter } from "next/navigation"
+import { PiWarningLight } from "react-icons/pi";
+import { IoMdCloseCircle } from "react-icons/io";
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { ITask } from "@/types/tasks"
 import Task from "@/app/components/Task"
-import Modal from "./bases/Modal"
+import Modal from "@/app/components/bases/Modal"
 import { updateTask, deleteTask } from "@/utils/api"
+import Conditional from "@/app/components/bases/Conditional";
 
 
 interface TodoListProps {
   tasks: ITask[]
+}
+
+type Inputs = {
+  todo: string
 }
 
 const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
@@ -22,26 +30,49 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
   const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
   const [taskToEdit, setTaskToEdit] = useState<ITask>({id: '', todo: '', isCompleted: false})
   const [idTaskToDelete, setIdTaskToDelete] = useState<string>('')
+  const [alertError, setAlertError] = useState<string>('')
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+    setValue
+  } = useForm<Inputs>({
+    defaultValues: {
+      todo: '',
+    }
+  })
 
   /**
    * Functions
    */
-  const handleOpenEditModal = (isOpen: boolean, task: ITask) => {
+  const handleOpenEditModal = (isOpen: boolean, id: string) => {
+    // Find task by id
+    const task = tasks.find(task => task.id === id) as ITask
+
+    setValue('todo', task.todo);
     setTaskToEdit(task)
     setIsShowEditModal(isOpen)
   }
 
-  const handleSubmitEditTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
-      e.preventDefault()
       setIsLoadingUpdate(true)
+      taskToEdit.todo = data.todo
+      
+      const resp = await updateTask(taskToEdit)
 
-      await updateTask(taskToEdit)
-
-      setIsShowEditModal(false)
-      router.refresh()
+      if (resp.status === 200) {
+        setIsShowEditModal(false)
+        reset();
+        setAlertError('')
+        router.refresh()
+      }
     } catch (error) {
-      console.log('error', error)
+      const { response } = error as any;
+
+      setAlertError(response.data.message || 'Something went wrong')
     } finally {
       setIsLoadingUpdate(false)
     }
@@ -85,7 +116,7 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
                   <Task
                     key={task.id}
                     task={task}
-                    setModalEditOpen={(isOpen, task) => handleOpenEditModal(isOpen, task)}
+                    setModalEditOpen={(isOpen, id) => handleOpenEditModal(isOpen, id)}
                     setModalDeleteOpen={(isOpen, id) => handleOpenDeleteModal(isOpen, id)}
                   />)
               }
@@ -99,19 +130,28 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
         isShowModal={isShowEditModal}
         setModalOpen={setIsShowEditModal}
         >
-        <form onSubmit={handleSubmitEditTask}>
+        <form  onSubmit={handleSubmit(onSubmit)}>
           <h3 className='font-bold text-lg text-center text-primary'>
             Edit task
           </h3>
 
           <div className='modal-action'>
-            <input
+            {/* <input
               value={taskToEdit.todo}
               onChange={(e) => setTaskToEdit({ ...taskToEdit, todo: e.target.value })}
               type="text"
               placeholder="New task"
               className="input input-bordered w-full max-w-full text-black bg-white"
-            />
+            /> */}
+            <div className='flex flex-col w-full space-y-2'>
+              <input
+                className="input input-bordered w-full max-w-full text-black bg-white"
+                { ...register("todo", { required: true }) }
+              />
+              <Conditional showWhen={!!errors.todo}>
+                <span className='text-xs text-red-500'>This field is required</span>
+              </Conditional>
+            </div>
 
             <button type='submit' className='btn btn-primary text-white'>
               { isLoadingUpdate && <span className="loading loading-sm"></span> }
@@ -119,6 +159,18 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
             </button>
           </div>
         </form>
+        <Conditional showWhen={!!alertError}>
+          <div role="alert" className="alert alert-error mt-5">
+            <PiWarningLight className="text-white" size={25} />
+            <span className='text-white'>{ alertError }</span>
+
+            <IoMdCloseCircle
+              className="text-white" size={25}
+              cursor="pointer"
+              onClick={() => setAlertError('')}
+            />
+          </div>
+        </Conditional>
       </Modal>
 
       {/* Delete modal */}

@@ -12,15 +12,11 @@ export const getAllTodos = async (): Promise<ITask[]> => {
 }
 
 export const addNewTask = async (task: { todo: string }): Promise<AxiosResponse<ITask>> => {
-  const resp = await axios.post(`${baseUrl}/todo`, task);
-
-  return resp;
+  return await axios.post(`${baseUrl}/todo`, task);
 }
 
-export const updateTask = async (task: ITask): Promise<ITask> => {
-  const { data } = await axios.put(`${baseUrl}/todo/${task.id}`, task);
-
-  return data;
+export const updateTask = async (task: ITask): Promise<AxiosResponse<ITask>> => {
+  return await axios.put(`${baseUrl}/todo/${task.id}`, task);
 }
 
 export const deleteTask = async (id: string): Promise<void> => {
