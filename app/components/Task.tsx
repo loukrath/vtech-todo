@@ -4,10 +4,9 @@ import { useState } from "react"
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
-import Modal from '@/app/components/bases/Modal'
 import { ITask } from "@/types/tasks";
 import { updateTask } from '@/utils/api'
-
+import Conditional from "@/app/components/bases/Conditional";
 
 interface TaskProps {
   task: ITask,
@@ -48,8 +47,7 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
       <tr key={task.id} className="border-b-gray-200 group">
         <td>{task.todo}</td>
         <td className="text-center">
-          {
-            task.isCompleted &&
+          <Conditional showWhen={task.isCompleted}>
             <button
               onClick={handleUpdateTaskStatus}
               className="btn btn-sm btn-outline btn-success btn-wide text-xs"
@@ -57,18 +55,17 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
               { isLoadingUpdate && <span className="loading loading-sm"></span> }
               Mark as Incomplete
             </button>
-          }
+          </Conditional>
 
-          {
-            !task.isCompleted &&
+          <Conditional showWhen={!task.isCompleted}>
             <button
-              onClick={handleUpdateTaskStatus}
-              className="btn btn-sm btn-outline btn-wide text-xs"
-            >
-              { isLoadingUpdate && <span className="loading loading-sm"></span> }
-              Mark as complete
-            </button>
-          }
+                onClick={handleUpdateTaskStatus}
+                className="btn btn-sm btn-outline btn-wide text-xs"
+              >
+                { isLoadingUpdate && <span className="loading loading-sm"></span> }
+                Mark as Complete
+              </button>
+          </Conditional>
         </td>
         <td className="flex opacity-0 space-x-2 group-hover:opacity-100">
           <FiEdit
