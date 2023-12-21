@@ -29,7 +29,8 @@ const Task: React.FC<TaskProps> = ({ task, setModalEditOpen, setModalDeleteOpen 
       const newTask = {
         id: task.id,
         todo: task.todo,
-        isCompleted: !task.isCompleted
+        isCompleted: !task.isCompleted,
+        updateStatus: true
       }
   
       await updateTask(newTask)
