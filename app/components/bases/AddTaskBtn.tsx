@@ -4,6 +4,8 @@ import { AiOutlinePlus } from 'react-icons/ai'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from "react-hook-form";
+import { PiWarningLight } from "react-icons/pi";
+import { IoMdCloseCircle } from "react-icons/io";
 
 import { addNewTask } from '@/utils/api'
 import Modal from '@/app/components/bases/Modal'
@@ -16,6 +18,8 @@ type Inputs = {
 const AddTaskBtn = () => {
   const router = useRouter();
   const [isShowModal, setModalOpen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [alertError, setAlertError] = useState<string>('')
 
   const {
     register,
@@ -29,11 +33,23 @@ const AddTaskBtn = () => {
   })
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
-    await addNewTask(data)
+    try {
+      setIsLoading(true)
+      const resp = await addNewTask(data)
 
-    setModalOpen(false)
-    reset();
-    router.refresh()
+      if (resp.status === 201) {
+        setModalOpen(false)
+        reset();
+        router.refresh()
+        setAlertError('')
+      }
+    } catch (error) {
+      const { response } = error as any;
+
+      setAlertError(response.data.message || 'Something went wrong')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -64,10 +80,24 @@ const AddTaskBtn = () => {
               type='submit'
               className='btn btn-primary text-white'
             >
+              <Conditional showWhen={isLoading}> <span className="loading loading-sm"></span> </Conditional>
               Add
             </button>
           </div>
         </form>
+
+        <Conditional showWhen={!!alertError}>
+          <div role="alert" className="alert alert-error mt-5">
+            <PiWarningLight className="text-white" size={25} />
+            <span className='text-white'>{ alertError }</span>
+
+            <IoMdCloseCircle
+              className="text-white" size={25}
+              cursor="pointer"
+              onClick={() => setAlertError('')}
+            />
+          </div>
+        </Conditional>
       </Modal>
     </div>
   )

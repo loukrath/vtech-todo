@@ -1,3 +1,5 @@
+import { AxiosResponse } from "axios";
+
 import { ITask } from "@/types/tasks";
 import axios from "@/libs/axios"
 
@@ -9,10 +11,10 @@ export const getAllTodos = async (): Promise<ITask[]> => {
   return data;
 }
 
-export const addNewTask = async (task: { todo: string }): Promise<ITask> => {
-  const { data } = await axios.post(`${baseUrl}/todo`, task);
+export const addNewTask = async (task: { todo: string }): Promise<AxiosResponse<ITask>> => {
+  const resp = await axios.post(`${baseUrl}/todo`, task);
 
-  return data;
+  return resp;
 }
 
 export const updateTask = async (task: ITask): Promise<ITask> => {
