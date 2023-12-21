@@ -1,25 +1,38 @@
 'use client'
 
 import { AiOutlinePlus } from 'react-icons/ai'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-
+import { SubmitHandler, useForm } from "react-hook-form";
 
 import { addNewTask } from '@/utils/api'
 import Modal from '@/app/components/bases/Modal'
+import Conditional from "@/app/components/bases/Conditional";
+
+type Inputs = {
+  todo: string
+}
 
 const AddTaskBtn = () => {
   const router = useRouter();
   const [isShowModal, setModalOpen] = useState<boolean>(false)
-  const [newTaskVal, setNewTaskVal] = useState<string>('')  
 
-  const handleSubmitNewTask = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>({
+    defaultValues: {
+      todo: '',
+    }
+  })
 
-    await addNewTask({ todo: newTaskVal })
+  const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
+    await addNewTask(data)
 
-    setNewTaskVal('')
     setModalOpen(false)
+    reset();
     router.refresh()
   }
 
@@ -31,21 +44,26 @@ const AddTaskBtn = () => {
       </button>
 
       <Modal isShowModal={isShowModal} setModalOpen={setModalOpen} >
-        <form onSubmit={handleSubmitNewTask}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <h3 className='font-bold text-lg text-center text-primary'>
             Add new task
           </h3>
 
           <div className='modal-action'>
-            <input
-              value={newTaskVal}
-              onChange={(e) => setNewTaskVal(e.target.value)}
-              type="text"
-              placeholder="New task"
-              className="input input-bordered w-full max-w-full text-black bg-white"
-            />
+            <div className='flex flex-col w-full space-y-2'>
+              <input
+                className="input input-bordered w-full max-w-full text-black bg-white"
+                { ...register("todo", { required: true }) }
+              />
+              <Conditional showWhen={!!errors.todo}>
+                <span className='text-xs text-red-500'>This field is required</span>
+              </Conditional>
+            </div>
 
-            <button type='submit' className='btn btn-primary text-white'>
+            <button
+              type='submit'
+              className='btn btn-primary text-white'
+            >
               Add
             </button>
           </div>
