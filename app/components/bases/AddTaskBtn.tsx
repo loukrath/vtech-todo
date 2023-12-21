@@ -1,8 +1,9 @@
 'use client'
 
 import { AiOutlinePlus } from 'react-icons/ai'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+
 
 import { addNewTask } from '@/utils/api'
 import Modal from '@/app/components/bases/Modal'
@@ -15,13 +16,7 @@ const AddTaskBtn = () => {
   const handleSubmitNewTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const newTask = {
-      id: "123",
-      todo: newTaskVal,
-      isCompleted: false
-    }
-
-    await addNewTask(newTask)
+    await addNewTask({ todo: newTaskVal })
 
     setNewTaskVal('')
     setModalOpen(false)

@@ -9,7 +9,7 @@ export const getAllTodos = async (): Promise<ITask[]> => {
   return data;
 }
 
-export const addNewTask = async (task: ITask): Promise<ITask> => {
+export const addNewTask = async (task: { todo: string }): Promise<ITask> => {
   const { data } = await axios.post(`${baseUrl}/todo`, task);
 
   return data;
