@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { PiWarningLight } from "react-icons/pi";
 import { IoMdCloseCircle } from "react-icons/io";
@@ -43,6 +43,10 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
       todo: '',
     }
   })
+
+  useEffect(() => {
+    console.log('page.tsx')
+  },[])
 
   /**
    * Functions
@@ -136,13 +140,6 @@ const TodoListTable: React.FC<TodoListProps> = ({ tasks }) => {
           </h3>
 
           <div className='modal-action'>
-            {/* <input
-              value={taskToEdit.todo}
-              onChange={(e) => setTaskToEdit({ ...taskToEdit, todo: e.target.value })}
-              type="text"
-              placeholder="New task"
-              className="input input-bordered w-full max-w-full text-black bg-white"
-            /> */}
             <div className='flex flex-col w-full space-y-2'>
               <input
                 className="input input-bordered w-full max-w-full text-black bg-white"
